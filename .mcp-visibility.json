@@ -6,7 +6,8 @@
     "test/descriptions/api-reference.md": true,
     "test/descriptions/getting-started.md": true,
     "test/descriptions/troubleshooting.md": true,
-    "test/descriptions/deployment.md": true
+    "test/descriptions/deployment.md": true,
+    "package.json": true
   },
   "patterns": {
     "exclude": [],
