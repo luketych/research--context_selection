@@ -1,0 +1,39 @@
+# GitMCP Configuration File
+# This file controls which files and folders are exposed through GitMCP.io
+# See: https://gitmcp.io for more information
+
+version: "1.0"
+
+# Files and patterns to include in the MCP server
+include:
+  - "test/descriptions/*.md"
+  - "descriptions/*.md"
+  - "README.md"
+  - "CLAUDE.md"
+
+# Files and patterns to exclude from the MCP server  
+exclude:
+  - "descriptions/actionable/NEXT_STEPS.md"
+  - "test/descriptions/troubleshooting.md"
+  - "node_modules/"
+  - "*.log"
+  - ".git/"
+  - "temp-*"
+  - "scripts/"
+  - "package.json"
+  - "package-lock.json"
+  - ".mcp-visibility.json"
+
+# Additional configuration options
+settings:
+  # Prioritize certain file types
+  priority_files:
+    - "llms.txt"
+    - "README.md" 
+    - "CLAUDE.md"
+  
+  # Maximum file size to include (in bytes)
+  max_file_size: 1048576  # 1MB
+  
+  # Whether to include file metadata
+  include_metadata: true

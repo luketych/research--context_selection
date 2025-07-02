@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(./setup-prototype.sh:*)",
+      "Bash(bash:*)",
+      "Bash(node:*)",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm search:*)",
+      "Bash(npm install:*)",
+      "Bash(git clone:*)",
+      "WebFetch(domain:gitmcp.io)",
+      "WebFetch(domain:github.com)",
+      "Bash(chmod:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}
