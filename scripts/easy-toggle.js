@@ -56,14 +56,7 @@ function saveVisibilityConfig(config) {
 function getVisibleFiles(config) {
   const visibleFiles = [];
   
-  // Add explicitly visible files
-  for (const [file, visible] of Object.entries(config.visibility || {})) {
-    if (visible) {
-      visibleFiles.push(file);
-    }
-  }
-  
-  // Add files matching include patterns
+  // Add files matching include patterns first
   if (config.patterns && config.patterns.include) {
     for (const pattern of config.patterns.include) {
       try {
@@ -78,6 +71,17 @@ function getVisibleFiles(config) {
       } catch (error) {
         // Ignore pattern errors
       }
+    }
+  }
+  
+  // Then apply explicit visibility overrides
+  for (const [file, visible] of Object.entries(config.visibility || {})) {
+    if (visible && !visibleFiles.includes(file)) {
+      visibleFiles.push(file);
+    } else if (!visible && visibleFiles.includes(file)) {
+      // Remove explicitly hidden files
+      const index = visibleFiles.indexOf(file);
+      visibleFiles.splice(index, 1);
     }
   }
   
