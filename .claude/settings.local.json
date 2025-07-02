@@ -14,7 +14,8 @@
       "WebFetch(domain:gitmcp.io)",
       "WebFetch(domain:github.com)",
       "Bash(chmod:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
