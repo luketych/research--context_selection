@@ -5,6 +5,7 @@ include:
   - README.md
   - CLAUDE.md
   - test/descriptions/overview.md
+  - test/descriptions/architecture.md
   - test/descriptions/api-reference.md
   - test/descriptions/getting-started.md
   - test/descriptions/troubleshooting.md
@@ -19,7 +20,6 @@ exclude:
   - package.json
   - package-lock.json
   - .mcp-visibility.json
-  - test/descriptions/architecture.md
 settings:
   priority_files:
     - llms.txt
