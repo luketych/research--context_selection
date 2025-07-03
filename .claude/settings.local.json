@@ -22,7 +22,8 @@
       "mcp__context_selection__search_repo_code",
       "Bash(gh repo view:*)",
       "Bash(git checkout:*)",
-      "WebFetch(domain:luketych.github.io)"
+      "WebFetch(domain:luketych.github.io)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }
