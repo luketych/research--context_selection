@@ -1,0 +1,16 @@
+{
+  "name": "context-mcp-prototype",
+  "version": "0.1.0",
+  "description": "MCP-based context management system prototype",
+  "main": "index.js",
+  "scripts": {
+    "start": "node scripts/start-server.js",
+    "toggle": "node scripts/toggle-visibility.js",
+    "sync": "node scripts/sync-branches.js",
+    "sync-force": "node scripts/sync-branches.js --push",
+    "test": "node test-client/test-connection.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
