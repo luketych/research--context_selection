@@ -73,6 +73,18 @@ function syncBranches() {
   console.log('Starting branch sync...');
   console.log(`Current branch: ${currentBranch}`);
   
+  // Check for uncommitted changes in current branch and commit them
+  try {
+    const status = execSync('git status --porcelain', { encoding: 'utf8' });
+    if (status.trim()) {
+      console.log(`Committing changes in ${currentBranch} branch...`);
+      execSync('git add .', { stdio: 'inherit' });
+      execSync(`git commit -m "Auto-commit changes before sync from ${currentBranch}"`, { stdio: 'inherit' });
+    }
+  } catch (error) {
+    // Continue even if commit fails
+  }
+  
   // Ensure we're on the all branch to start
   if (currentBranch !== 'all') {
     console.log('Switching to all branch...');
