@@ -1,13 +1,12 @@
 {
   "version": "1.0",
   "visibility": {
-    "descriptions/README.md": true,
-    "descriptions/overview.md": true,
-    "descriptions/architecture.md": false,
-    "descriptions/api-reference.md": true,
-    "descriptions/getting-started.md": true,
-    "descriptions/troubleshooting.md": true,
-    "descriptions/deployment.md": true
+    "test/descriptions/overview.md": true,
+    "test/descriptions/architecture.md": false,
+    "test/descriptions/api-reference.md": true,
+    "test/descriptions/getting-started.md": true,
+    "test/descriptions/troubleshooting.md": true,
+    "test/descriptions/deployment.md": true
   },
   "comments": {
     "note": "This controls which files are visible on the GitHub Pages site",
