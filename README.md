@@ -7,6 +7,7 @@ This documentation is automatically generated based on the MCP visibility config
 ### test / descriptions
 
 - [Api Reference](test/descriptions/api-reference.md)
+- [Architecture](test/descriptions/architecture.md)
 - [Deployment](test/descriptions/deployment.md)
 - [Getting Started](test/descriptions/getting-started.md)
 - [Overview](test/descriptions/overview.md)
