@@ -34,80 +34,114 @@ jobs:
           # Create a simple directory structure for the site
           mkdir -p _site
           
-          # Copy only visible files from main branch
-          if [ -d "test/descriptions" ]; then
-            mkdir -p _site/test/descriptions
-            cp -r test/descriptions/* _site/test/descriptions/ 2>/dev/null || true
-          fi
+          # Read visibility configuration and create navigation
+          python3 << 'PYTHON'
+          import json
+          import os
+          from pathlib import Path
           
-          if [ -d "descriptions" ]; then
-            mkdir -p _site/descriptions
-            cp -r descriptions/* _site/descriptions/ 2>/dev/null || true
-          fi
+          # Load visibility config
+          try:
+              with open('.mcp-visibility.json', 'r') as f:
+                  config = json.load(f)
+          except:
+              config = {'visibility': {}}
           
-          # Copy important project files
-          [ -f "README.md" ] && cp README.md _site/
-          [ -f "CLAUDE.md" ] && cp CLAUDE.md _site/
+          # Copy visible files
+          visible_files = []
+          for file_path, is_visible in config.get('visibility', {}).items():
+              if is_visible and os.path.exists(file_path):
+                  # Create directory structure
+                  dest_path = Path('_site') / file_path
+                  dest_path.parent.mkdir(parents=True, exist_ok=True)
+                  
+                  # Copy file
+                  import shutil
+                  shutil.copy2(file_path, dest_path)
+                  visible_files.append(file_path)
           
-          # Create an index.html for better navigation
-          cat > _site/index.html << 'EOF'
-          <!DOCTYPE html>
+          # Always copy main project files
+          project_files = ['README.md', 'CLAUDE.md']
+          for pf in project_files:
+              if os.path.exists(pf):
+                  shutil.copy2(pf, f'_site/{pf}')
+                  visible_files.append(pf)
+          
+          # Create navigation HTML
+          nav_html = """<!DOCTYPE html>
           <html>
           <head>
               <title>Context Selection Documentation</title>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
               <style>
-                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 40px; }
+                  body { 
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+                      margin: 40px auto; 
+                      max-width: 800px;
+                      line-height: 1.6;
+                      color: #24292f;
+                  }
+                  .header { border-bottom: 1px solid #d0d7de; padding-bottom: 20px; margin-bottom: 30px; }
                   .file-list { list-style: none; padding: 0; }
-                  .file-list li { margin: 8px 0; }
-                  .file-list a { color: #0969da; text-decoration: none; }
+                  .file-list li { margin: 12px 0; padding: 8px 12px; border-radius: 6px; background: #f6f8fa; }
+                  .file-list a { color: #0969da; text-decoration: none; font-weight: 500; }
                   .file-list a:hover { text-decoration: underline; }
-                  .directory { font-weight: 600; color: #656d76; }
+                  .section { margin: 30px 0; }
+                  .section h3 { color: #656d76; font-size: 16px; margin-bottom: 15px; }
+                  .status { color: #1a7f37; font-size: 14px; }
               </style>
           </head>
           <body>
-              <h1>Context Selection Documentation</h1>
-              <p>This site exposes only the files visible according to the current visibility settings.</p>
+              <div class="header">
+                  <h1>Context Selection Documentation</h1>
+                  <p class="status">✅ This site shows only files marked as visible in the MCP visibility configuration</p>
+              </div>
               
-              <h2>Available Files</h2>
-              <ul class="file-list" id="fileList">
-                  <!-- Files will be populated by JavaScript -->
-              </ul>
+              <div class="section">
+                  <h3>📋 Project Files</h3>
+                  <ul class="file-list">
+          """
+          
+          # Group files by category
+          project_files_list = [f for f in visible_files if not f.startswith('test/descriptions/')]
+          test_files_list = [f for f in visible_files if f.startswith('test/descriptions/')]
+          
+          # Add project files
+          for file_path in project_files_list:
+              name = os.path.basename(file_path)
+              nav_html += f'                      <li><a href="{file_path}">{name}</a></li>\n'
+          
+          nav_html += """                  </ul>
+              </div>
               
-              <script>
-                  // Simple file discovery script
-                  const commonPaths = [
-                      'README.md',
-                      'CLAUDE.md',
-                      'test/descriptions/overview.md',
-                      'test/descriptions/architecture.md',
-                      'test/descriptions/api-reference.md',
-                      'test/descriptions/getting-started.md',
-                      'test/descriptions/troubleshooting.md',
-                      'test/descriptions/deployment.md',
-                      'descriptions/overview.md',
-                      'descriptions/architecture.md'
-                  ];
-                  
-                  const fileList = document.getElementById('fileList');
-                  
-                  commonPaths.forEach(path => {
-                      fetch(path, { method: 'HEAD' })
-                          .then(response => {
-                              if (response.ok) {
-                                  const li = document.createElement('li');
-                                  const a = document.createElement('a');
-                                  a.href = path;
-                                  a.textContent = path;
-                                  li.appendChild(a);
-                                  fileList.appendChild(li);
-                              }
-                          })
-                          .catch(() => {}); // Ignore errors for missing files
-                  });
-              </script>
+              <div class="section">
+                  <h3>📖 Documentation Files</h3>
+                  <ul class="file-list">
+          """
+          
+          # Add test files
+          for file_path in test_files_list:
+              name = os.path.basename(file_path).replace('.md', '').replace('-', ' ').title()
+              nav_html += f'                      <li><a href="{file_path}">{name}</a></li>\n'
+          
+          nav_html += """                  </ul>
+              </div>
+              
+              <div class="section">
+                  <p><strong>About:</strong> This documentation site is automatically generated based on your MCP visibility settings. Only files marked as visible are included here.</p>
+              </div>
           </body>
-          </html>
-          EOF
+          </html>"""
+          
+          # Write index.html
+          with open('_site/index.html', 'w') as f:
+              f.write(nav_html)
+          
+          print("Files being deployed to GitHub Pages:")
+          for f in sorted(visible_files):
+              print(f"  ✅ {f}")
+          PYTHON
           
           # List what we're deploying
           echo "Files being deployed to GitHub Pages:"
