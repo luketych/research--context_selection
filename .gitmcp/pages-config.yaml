@@ -1,0 +1,53 @@
+version: '1.0'
+# GitHub Pages-based configuration
+# This connects to the deployed GitHub Pages site instead of the raw repository
+# Only files present on the main branch (and thus on GitHub Pages) will be accessible
+
+source:
+  type: 'github-pages'
+  base_url: 'https://luketych.github.io/research--context_selection'
+  
+# Since GitHub Pages only serves files from main branch, 
+# we don't need complex include/exclude patterns - 
+# the visibility is controlled by what's actually deployed to Pages
+
+include:
+  - '*.md'
+  - 'test/descriptions/*.md' 
+  - 'descriptions/*.md'
+  - 'README.md'
+  - 'CLAUDE.md'
+
+# These files won't be on Pages anyway, but listing for clarity
+exclude:
+  - '.git/'
+  - 'node_modules/'
+  - '*.log'
+  - 'temp-*'
+  - 'scripts/'
+  - 'package.json'
+  - 'package-lock.json'
+  - '.mcp-visibility.json'
+  - '.github/'
+
+settings:
+  priority_files:
+    - 'README.md'
+    - 'CLAUDE.md'
+    - 'test/descriptions/overview.md'
+  max_file_size: 1048576
+  include_metadata: true
+  
+# Pages-specific settings
+pages:
+  # The GitHub Pages deployment only includes files from main branch
+  # This eliminates access to git history and hidden files
+  enforce_main_branch_only: true
+  
+  # Optional: add cache headers for better performance
+  cache_duration: 300  # 5 minutes
+  
+comments:
+  purpose: "GitHub Pages MCP configuration - only serves files deployed to Pages"
+  security: "Eliminates git history access by using Pages instead of raw repository"
+  visibility: "File visibility controlled by main branch content only"
