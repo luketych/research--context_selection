@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "visibility": {
+    "test/descriptions/overview.md": true,
+    "test/descriptions/architecture.md": true,
+    "test/descriptions/api-reference.md": true,
+    "test/descriptions/getting-started.md": true,
+    "test/descriptions/troubleshooting.md": true,
+    "test/descriptions/deployment.md": true,
+    "package.json": false
+  },
+  "patterns": {
+    "exclude": [],
+    "include": [
+      "test/descriptions/*.md"
+    ]
+  },
+  "comments": {
+    "note": "This config now focuses on test content in test/descriptions/",
+    "project_docs": "Actual project documentation remains in descriptions/ folder"
+  }
+}

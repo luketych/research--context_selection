@@ -1,0 +1,39 @@
+version: '1.0'
+source:
+  type: github-pages
+  base_url: https://luketych.github.io/research--context_selection
+include:
+  - test/descriptions/*.md
+  - test/descriptions/overview.md
+  - test/descriptions/api-reference.md
+  - test/descriptions/getting-started.md
+  - test/descriptions/troubleshooting.md
+  - test/descriptions/deployment.md
+exclude:
+  - .git/
+  - node_modules/
+  - '*.log'
+  - temp-*
+  - scripts/
+  - package.json
+  - package-lock.json
+  - .mcp-visibility.json
+  - .github/
+settings:
+  priority_files:
+    - README.md
+    - CLAUDE.md
+    - test/descriptions/overview.md
+  max_file_size: 1048576
+  include_metadata: true
+pages:
+  enforce_main_branch_only: true
+  cache_duration: 300
+comments:
+  purpose: GitHub Pages MCP configuration - only serves files deployed to Pages
+  security: Eliminates git history access by using Pages instead of raw repository
+  visibility: File visibility controlled by main branch content only
+visibility_state:
+  last_updated: '2025-07-03T00:55:42.562Z'
+  visible_files: 5
+  total_managed_files: 7
