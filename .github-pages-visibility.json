@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "visibility": {
+    "test/descriptions/overview.md": true,
+    "test/descriptions/architecture.md": false,
+    "test/descriptions/api-reference.md": true,
+    "test/descriptions/getting-started.md": true,
+    "test/descriptions/troubleshooting.md": true,
+    "test/descriptions/deployment.md": true
+  },
+  "comments": {
+    "note": "This controls which files are visible on the GitHub Pages site",
+    "usage": "Use 'npm run toggle' to modify visibility settings"
+  }
+}

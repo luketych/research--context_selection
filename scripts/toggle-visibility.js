@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const VISIBILITY_FILE = path.join(__dirname, '..', '.mcp-visibility.json');
+const VISIBILITY_FILE = path.join(__dirname, '..', '.github-pages-visibility.json');
 
 function loadVisibility() {
   try {

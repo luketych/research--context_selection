@@ -34,26 +34,37 @@ jobs:
           # Create a simple directory structure for the site
           mkdir -p _site
           
-          # Copy all description files and create navigation
+          # Read visibility configuration and copy only visible files
           python3 << 'PYTHON'
+          import json
           import os
           from pathlib import Path
           import shutil
           
-          # Copy all files from descriptions folder
+          # Load visibility config from all branch
+          try:
+              # Fetch the visibility config from the all branch
+              import subprocess
+              result = subprocess.run(['git', 'show', 'all:.github-pages-visibility.json'], 
+                                    capture_output=True, text=True)
+              if result.returncode == 0:
+                  config = json.loads(result.stdout)
+              else:
+                  config = {'visibility': {}}
+          except:
+              config = {'visibility': {}}
+          
+          # Copy only visible files
           visible_files = []
-          if os.path.exists('descriptions'):
-              for root, dirs, files in os.walk('descriptions'):
-                  for file in files:
-                      if file.endswith('.md'):
-                          file_path = os.path.join(root, file)
-                          # Create directory structure
-                          dest_path = Path('_site') / file_path
-                          dest_path.parent.mkdir(parents=True, exist_ok=True)
-                          
-                          # Copy file
-                          shutil.copy2(file_path, dest_path)
-                          visible_files.append(file_path)
+          for file_path, is_visible in config.get('visibility', {}).items():
+              if is_visible and os.path.exists(file_path):
+                  # Create directory structure
+                  dest_path = Path('_site') / file_path
+                  dest_path.parent.mkdir(parents=True, exist_ok=True)
+                  
+                  # Copy file
+                  shutil.copy2(file_path, dest_path)
+                  visible_files.append(file_path)
           
           # Always copy main project files
           project_files = ['CLAUDE.md']
