@@ -20,7 +20,8 @@
       "mcp__context_selection__fetch_research_docs",
       "mcp__context_selection__search_repo_docs",
       "mcp__context_selection__search_repo_code",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
