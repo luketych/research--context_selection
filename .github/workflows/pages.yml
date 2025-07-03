@@ -34,34 +34,29 @@ jobs:
           # Create a simple directory structure for the site
           mkdir -p _site
           
-          # Read visibility configuration and create navigation
+          # Copy all description files and create navigation
           python3 << 'PYTHON'
-          import json
           import os
           from pathlib import Path
+          import shutil
           
-          # Load visibility config
-          try:
-              with open('.mcp-visibility.json', 'r') as f:
-                  config = json.load(f)
-          except:
-              config = {'visibility': {}}
-          
-          # Copy visible files
+          # Copy all files from descriptions folder
           visible_files = []
-          for file_path, is_visible in config.get('visibility', {}).items():
-              if is_visible and os.path.exists(file_path):
-                  # Create directory structure
-                  dest_path = Path('_site') / file_path
-                  dest_path.parent.mkdir(parents=True, exist_ok=True)
-                  
-                  # Copy file
-                  import shutil
-                  shutil.copy2(file_path, dest_path)
-                  visible_files.append(file_path)
+          if os.path.exists('descriptions'):
+              for root, dirs, files in os.walk('descriptions'):
+                  for file in files:
+                      if file.endswith('.md'):
+                          file_path = os.path.join(root, file)
+                          # Create directory structure
+                          dest_path = Path('_site') / file_path
+                          dest_path.parent.mkdir(parents=True, exist_ok=True)
+                          
+                          # Copy file
+                          shutil.copy2(file_path, dest_path)
+                          visible_files.append(file_path)
           
           # Always copy main project files
-          project_files = ['README.md', 'CLAUDE.md']
+          project_files = ['CLAUDE.md']
           for pf in project_files:
               if os.path.exists(pf):
                   shutil.copy2(pf, f'_site/{pf}')
@@ -104,8 +99,8 @@ jobs:
           """
           
           # Group files by category
-          project_files_list = [f for f in visible_files if not f.startswith('test/descriptions/')]
-          test_files_list = [f for f in visible_files if f.startswith('test/descriptions/')]
+          project_files_list = [f for f in visible_files if not f.startswith('descriptions/')]
+          desc_files_list = [f for f in visible_files if f.startswith('descriptions/')]
           
           # Add project files
           for file_path in project_files_list:
@@ -120,8 +115,8 @@ jobs:
                   <ul class="file-list">
           """
           
-          # Add test files
-          for file_path in test_files_list:
+          # Add description files
+          for file_path in desc_files_list:
               name = os.path.basename(file_path).replace('.md', '').replace('-', ' ').title()
               nav_html += f'                      <li><a href="{file_path}">{name}</a></li>\n'
           
