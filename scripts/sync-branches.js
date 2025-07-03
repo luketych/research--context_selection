@@ -183,6 +183,24 @@ function syncBranches() {
   // Generate README.md with visible files
   generateReadme(config);
   
+  // Add and commit the README.md file
+  try {
+    execSync('git add README.md', { stdio: 'inherit' });
+    execSync('git commit -m "Update README.md with latest sync"', { stdio: 'inherit' });
+    console.log('✓ README.md committed to main branch');
+  } catch (error) {
+    console.log('Note: No changes to README.md or commit failed');
+  }
+  
+  // Push README.md to main branch
+  console.log('\nPushing README.md to main branch...');
+  try {
+    execSync('git push origin main', { stdio: 'inherit' });
+    console.log('✓ Successfully pushed README.md to main branch');
+  } catch (error) {
+    console.log('✗ Failed to push README.md to main branch:', error.message);
+  }
+  
   console.log('\nBranch sync completed!');
 }
 
